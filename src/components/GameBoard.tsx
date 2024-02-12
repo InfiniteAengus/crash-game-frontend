@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { f, fixed, rf, getColor } from '@/utils/utils';
+import { useEffect, useState } from "react";
+import { f, fixed, rf, getColor } from "@/utils/utils";
 // import { coinImg } from 'app/config/const';
 
 const rocketImageCount = 180;
@@ -7,8 +7,8 @@ const crashImageCount = 30;
 const rocketImages: HTMLImageElement[] = [];
 const crashImages: HTMLImageElement[] = [];
 
-const PRIMARY_COLOR = '#6D6D8F';
-const BACKGROUND_COLOR = 'rgb(23, 22, 73)';
+const PRIMARY_COLOR = "#6D6D8F";
+const BACKGROUND_COLOR = "rgb(23, 22, 73)";
 
 let width = 800;
 let height = 600;
@@ -25,19 +25,22 @@ let _mywin = 0;
 let _cnt = 0;
 
 let currentInverval: any = null;
-let timeElapsed: number, crashTimeElapsed: number, isRising: boolean | null, ctx: any;
+let timeElapsed: number,
+  crashTimeElapsed: number,
+  isRising: boolean | null,
+  ctx: any;
 
 const imageParachute = new Image();
-imageParachute.src = 'images/parachute.png';
+imageParachute.src = "images/parachute.png";
 
 const WinImages = new Image();
-WinImages.src = 'images/cashout.png';
+WinImages.src = "images/cashout.png";
 
 const loadImage = async (i: number): Promise<HTMLImageElement> => {
   return new Promise<HTMLImageElement>((resolve) => {
     const img = new Image();
     img.onload = () => resolve(img);
-    img.src = `images/rocket/${String(i).padStart(4, '0')}.png`;
+    img.src = `images/rocket/${String(i).padStart(4, "0")}.png`;
   });
 };
 
@@ -45,13 +48,15 @@ const loadImage1 = async (i: number): Promise<HTMLImageElement> => {
   return new Promise<HTMLImageElement>((resolve) => {
     const img = new Image();
     img.onload = () => resolve(img);
-    img.src = `images/crash/${String(i).padStart(4, '0')}.png`;
+    img.src = `images/crash/${String(i).padStart(4, "0")}.png`;
   });
 };
 
 const importImages = async () => {
-  for (let i = 1; i <= rocketImageCount; i++) rocketImages.push(await loadImage(i));
-  for (let i = 0; i < crashImageCount; i++) crashImages.push(await loadImage1(i * 4));
+  for (let i = 1; i <= rocketImageCount; i++)
+    rocketImages.push(await loadImage(i));
+  for (let i = 0; i < crashImageCount; i++)
+    crashImages.push(await loadImage1(i * 4));
 };
 
 importImages();
@@ -62,9 +67,9 @@ const drawText = (
   y: number,
   color: string,
   fontSize: string,
-  align = 'left'
+  align = "left"
 ) => {
-  ctx.font = fontSize + (fontSize.includes('Passion One') ? '' : ' Montserrat'); // Montserrat
+  ctx.font = fontSize + (fontSize.includes("Passion One") ? "" : " Montserrat"); // Montserrat
   ctx.textAlign = align;
   ctx.fillStyle = color;
   ctx.fillText(content, x, y);
@@ -100,19 +105,20 @@ const drawAxis = (W: number, H: number) => {
     let xPos = ORG_X + (STAGE_WIDTH / W) * x;
     let yPos = ORG_Y;
     rt = drawText(
-      x.toString() + 's',
+      x.toString() + "s",
       xPos,
       yPos,
       PRIMARY_COLOR,
       `15px 'Roboto'`,
-      x ? 'center' : 'left'
+      x ? "center" : "left"
     );
   }
 
   for (let y = 0; y <= H; y += yInterval) {
     let xPos = ORG_X;
     let yPos = ORG_Y - (STAGE_HEIGHT / H) * y - 8;
-    if (y) drawText(y + 'x', xPos - 1, yPos, PRIMARY_COLOR, `20px 'Roboto'`, 'left');
+    if (y)
+      drawText(y + "x", xPos - 1, yPos, PRIMARY_COLOR, `20px 'Roboto'`, "left");
   }
 
   ctx.restore();
@@ -155,8 +161,8 @@ const drawGraph = (W: number, H: number) => {
 
   const pureGraph = () => {
     ctx.beginPath();
-    ctx.lineCap = 'round';
-    ctx.moveTo(ORG_X + D, ORG_Y - D);
+    ctx.lineCap = "round";
+    ctx.moveTo(ORG_X + D, ORG_Y - D - STAGE_HEIGHT / H);
     for (let i = 0; i <= SEG; i++) {
       let x = (time / SEG) * i;
       let curX = ORG_X + (STAGE_WIDTH / W) * x;
@@ -178,9 +184,9 @@ const drawGraph = (W: number, H: number) => {
       ORG_Y - D,
       Math.hypot(xx, yy)
     );
-    radFillGrad.addColorStop(0, '#292938');
-    radFillGrad.addColorStop(0.5, '#4A70FF');
-    radFillGrad.addColorStop(1, '#AD19C6');
+    radFillGrad.addColorStop(0, "#292938");
+    radFillGrad.addColorStop(0.5, "#4A70FF");
+    radFillGrad.addColorStop(1, "#AD19C6");
     const edx = ORG_X + D + xx;
     const sty = ORG_Y - D;
     ctx.lineTo(edx, sty);
@@ -196,13 +202,20 @@ const drawGraph = (W: number, H: number) => {
     pureGraph();
     const xx = (time / W) * STAGE_WIDTH;
     const yy = (f(time) / H) * STAGE_HEIGHT;
-    const radGrad = ctx.createRadialGradient(ORG_X, ORG_Y, 0, ORG_X, ORG_Y, Math.hypot(xx, yy));
-    radGrad.addColorStop(0, '#61B0D0');
-    radGrad.addColorStop(0.5, '#4A70FF');
-    radGrad.addColorStop(1, '#AD19C6');
+    const radGrad = ctx.createRadialGradient(
+      ORG_X,
+      ORG_Y,
+      0,
+      ORG_X,
+      ORG_Y,
+      Math.hypot(xx, yy)
+    );
+    radGrad.addColorStop(0, "#61B0D0");
+    radGrad.addColorStop(0.5, "#4A70FF");
+    radGrad.addColorStop(1, "#AD19C6");
     ctx.lineWidth = 3;
     ctx.strokeStyle = radGrad;
-    ctx.shadowColor = '#111111';
+    ctx.shadowColor = "#111111";
     ctx.shadowOffsetY = 1;
     ctx.shadowBlur = 3;
     ctx.stroke();
@@ -211,8 +224,8 @@ const drawGraph = (W: number, H: number) => {
 
   const drawSmoothBackground = () => {
     ctx.save();
-    ctx.fillStyle = 'rgb(22, 23, 73)';
-    ctx.filter = 'blur(20px)';
+    ctx.fillStyle = "rgb(22, 23, 73)";
+    ctx.filter = "blur(20px)";
     ctx.fillRect(0, ORG_Y - 50, width, 100);
     ctx.restore();
   };
@@ -249,11 +262,12 @@ const drawBackground = () => {
 };
 
 const drawStatusText = () => {
+  const time = Math.max(timeElapsed - 5, 0);
   ctx.save();
 
-  let content = fixed(f(timeElapsed), 2).toFixed(2) + 'x';
+  let content = fixed(f(time), 2).toFixed(2) + "x";
   let fontSize = width > 720 ? 72 : 48;
-  let textAlign = width > 384 ? 'center' : 'left';
+  let textAlign = width > 384 ? "center" : "left";
   let textX = width > 384 ? width / 2 : ORG_X + 40;
   let textY = height / 3 + 20;
 
@@ -267,17 +281,17 @@ const drawStatusText = () => {
     content,
     textX,
     textY,
-    isRising ? '#F5F5FA' : '#FF3300',
+    isRising ? "#F5F5FA" : "#FF3300",
     `${fontSize}px 'Passion One'`,
     textAlign
   );
 
   if (!isRising) {
     drawText(
-      'Round Over',
+      "Round Over",
       textX,
       textY - fontSize / 2 - 10,
-      isRising ? '#F5F5FA' : '#FF3300',
+      isRising ? "#F5F5FA" : "#FF3300",
       `${fontSize / 3}px 'Passion One'`,
       textAlign
     );
@@ -299,7 +313,7 @@ const drawPlayers = (players: IPlayer[], W: number, H: number) => {
     ctx.save();
     ctx.translate(curX, curY + (imgHeight * (timeElapsed - time)) / 0.1 / 30);
     ctx.globalAlpha = 1 - (20 - (timeElapsed - time) / 0.1) / 40;
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = "#fff";
     ctx.ellipse(
       (-imgWidth * rt) / 2,
       (-imgHeight * rt) / 2,
@@ -309,7 +323,14 @@ const drawPlayers = (players: IPlayer[], W: number, H: number) => {
       0,
       2 * Math.PI
     );
-    drawText(players[i].name, (imgWidth * rt) / 2 + 4, 6, '#6D6D8F', `${12}px`, 'left');
+    drawText(
+      players[i].name,
+      (imgWidth * rt) / 2 + 4,
+      6,
+      "#6D6D8F",
+      `${12}px`,
+      "left"
+    );
     ctx.restore();
   }
 };
@@ -329,12 +350,12 @@ const drawHistory = (histories: any[]) => {
     ctx.roundRect(x - 28, y - 12 * 1.4, 56, 12 * 2, [5]);
     ctx.stroke();
     drawText(
-      bet.crashPoint.toFixed(2) + 'x',
+      bet.crashPoint.toFixed(2) + "x",
       x,
       y,
       getColor(bet.crashPoint),
       `20px 'Roboto'`,
-      'center'
+      "center"
     );
   });
 };
@@ -374,21 +395,22 @@ const draw = () => {
     if (_cnt > 3) {
       ctx.save();
       ctx.translate(width / 2, height / 2);
-      const content = '+' + _mywin.toFixed(3);
+      const content = "+" + _mywin.toFixed(3);
       let posX = 0;
       let posY = STAGE_HEIGHT / (width > 384 ? 4 : width < 768 ? 3.5 : 4.5);
       const fontSize = `${width > 540 ? 48 : 36}px`;
-      ctx.font = fontSize + ' Passion One';
-      ctx.textAlign = 'center';
+      ctx.font = fontSize + " Passion One";
+      ctx.textAlign = "center";
 
       let metrics = ctx.measureText(content);
-      let textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+      let textHeight =
+        metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
       let linearGrad = ctx.createLinearGradient(0, posY - textHeight, 0, posY);
-      linearGrad.addColorStop(0.3, '#FFFFFF');
-      linearGrad.addColorStop(0.7, '#FF9900');
+      linearGrad.addColorStop(0.3, "#FFFFFF");
+      linearGrad.addColorStop(0.7, "#FF9900");
       ctx.fillStyle = linearGrad;
       ctx.shadowBlur = 12;
-      ctx.shadowColor = '#FF9900';
+      ctx.shadowColor = "#FF9900";
       ctx.fillText(content, posX, posY);
       ctx.restore();
     }
@@ -405,7 +427,13 @@ interface GameBoardProps {
   refer: any;
 }
 
-const GameBoard = ({ gameState, players, history, mywin, refer }: GameBoardProps) => {
+const GameBoard = ({
+  gameState,
+  players,
+  history,
+  mywin,
+  refer,
+}: GameBoardProps) => {
   const [state, setState] = useState(0);
 
   useEffect(() => {
@@ -420,7 +448,7 @@ const GameBoard = ({ gameState, players, history, mywin, refer }: GameBoardProps
       const canvas = refer.current;
       if (!canvas) return;
 
-      ctx = canvas.getContext('2d');
+      ctx = canvas.getContext("2d");
       const parentWidth = canvas.parentElement.offsetWidth;
       width = parentWidth;
       height = ((parentWidth * 480) / 720) * (parentWidth > 384 ? 1 : 2);
@@ -429,7 +457,8 @@ const GameBoard = ({ gameState, players, history, mywin, refer }: GameBoardProps
       ORG_X = GAP;
       ORG_Y = height - GAP * 0.8;
       STAGE_WIDTH = width - GAP * (parentWidth > 384 ? 2 : 4);
-      STAGE_HEIGHT = height - GAP * (parentWidth > 540 ? 3 : parentWidth > 384 ? 4 : 5);
+      STAGE_HEIGHT =
+        height - GAP * (parentWidth > 540 ? 3 : parentWidth > 384 ? 4 : 5);
 
       draw();
     };
@@ -451,26 +480,38 @@ const GameBoard = ({ gameState, players, history, mywin, refer }: GameBoardProps
     }, 100);
 
     return () => clearInterval(interval);
-  }, [gameState.isRising, gameState.crashTimeElapsed, refer, gameState.timeElapsed]);
+  }, [
+    gameState.isRising,
+    gameState.crashTimeElapsed,
+    refer,
+    gameState.timeElapsed,
+  ]);
 
   useEffect(() => {
-    if (Math.abs(timeElapsed - gameState.timeElapsed) > 0.25) timeElapsed = gameState.timeElapsed;
+    if (Math.abs(timeElapsed - gameState.timeElapsed) > 0.25)
+      timeElapsed = gameState.timeElapsed;
   }, [gameState.timeElapsed]);
 
   histories = history.map((bet: any) => bet).reverse();
   _players = players;
 
   return (
-    <div className='relative'>
+    <div className="relative">
       {/* <div className="blur"></div>
       <div className="blur2"></div> */}
-      <div className='lg:hidden text-white flex justify-between mb-2 p-2 bg-[#6D6D8F] rounded-md'>
+      <div className="lg:hidden text-white flex justify-between mb-2 p-2 bg-[#6D6D8F] rounded-md">
         <p>
-          {players.filter((player: any) => player.cashPoint > 0).length}/{players.length} Players
+          {players.filter((player: any) => player.cashPoint > 0).length}/
+          {players.length} Players
         </p>
         <p>Total: {gameState.totalBet} EBONE</p>
       </div>
-      <canvas className='mx-auto rounded-3xl' ref={refer} width={width} height={height} />
+      <canvas
+        className="mx-auto rounded-3xl"
+        ref={refer}
+        width={width}
+        height={height}
+      />
     </div>
   );
 };

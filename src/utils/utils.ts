@@ -6,7 +6,7 @@ export const getColor = (cashPoint: number) => {
 };
 
 export const f = (x: number) => {
-  x = Math.max(x - 5, 0);
+  // x = Math.max(x - 5, 0);
   // if (x < 0) {
   //  return Math.pow(1 - (x * x) / 5 / 5, 0.4);
   // }
