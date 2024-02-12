@@ -119,15 +119,16 @@ const drawAxis = (W: number, H: number) => {
 };
 
 const drawRocket = (W: number, H: number) => {
+  const time = Math.max(timeElapsed - 5, 0);
   const D = 30 * rate;
-  const curX = ORG_X + (STAGE_WIDTH / W) * timeElapsed + D;
-  const curY = ORG_Y - (f(timeElapsed) / H) * STAGE_HEIGHT - D;
+  const curX = ORG_X + (STAGE_WIDTH / W) * time + D;
+  const curY = ORG_Y - (f(time) / H) * STAGE_HEIGHT - D;
   const imgWidth = 200 * rate;
   const imgHeight = 200 * rate;
   const delta = 0.1;
   let ang = Math.atan2(
-    ((f(timeElapsed - delta) - f(timeElapsed)) / H) * (width > 384 ? 1 : 2),
-    delta / W / (timeElapsed / 5 ? 0.5 : 1)
+    ((f(time - delta) - f(time)) / H) * (width > 384 ? 1 : 2),
+    delta / W / (time / 5 ? 0.5 : 1)
   );
   ctx.save();
   ctx.translate(curX, curY);
@@ -137,7 +138,7 @@ const drawRocket = (W: number, H: number) => {
       rocketImages[
         rocketImages.length !== rocketImageCount
           ? 0
-          : parseInt((timeElapsed * 50).toString()) % rocketImageCount
+          : parseInt((time * 50).toString()) % rocketImageCount
       ],
       -imgWidth / 4,
       -imgHeight / 2,
@@ -148,15 +149,16 @@ const drawRocket = (W: number, H: number) => {
 };
 
 const drawGraph = (W: number, H: number) => {
+  const time = Math.max(timeElapsed - 5, 0);
   const D = 30 * rate;
-  const SEG = Math.min(timeElapsed * 100, 1000);
+  const SEG = Math.min(time * 100, 1000);
 
   const pureGraph = () => {
     ctx.beginPath();
     ctx.lineCap = 'round';
     ctx.moveTo(ORG_X + D, ORG_Y - D);
     for (let i = 0; i <= SEG; i++) {
-      let x = (timeElapsed / SEG) * i;
+      let x = (time / SEG) * i;
       let curX = ORG_X + (STAGE_WIDTH / W) * x;
       let curY = ORG_Y - (f(x) / H) * STAGE_HEIGHT;
       ctx.lineTo(curX + D, curY - D);
@@ -166,8 +168,8 @@ const drawGraph = (W: number, H: number) => {
   const drawGradientFill = () => {
     ctx.save();
     pureGraph();
-    const xx = (timeElapsed / W) * STAGE_WIDTH;
-    const yy = (f(timeElapsed) / H) * STAGE_HEIGHT;
+    const xx = (time / W) * STAGE_WIDTH;
+    const yy = (f(time) / H) * STAGE_HEIGHT;
     const radFillGrad = ctx.createRadialGradient(
       ORG_X + D,
       ORG_Y - D,
@@ -192,8 +194,8 @@ const drawGraph = (W: number, H: number) => {
   const drawGraphLine = () => {
     ctx.save();
     pureGraph();
-    const xx = (timeElapsed / W) * STAGE_WIDTH;
-    const yy = (f(timeElapsed) / H) * STAGE_HEIGHT;
+    const xx = (time / W) * STAGE_WIDTH;
+    const yy = (f(time) / H) * STAGE_HEIGHT;
     const radGrad = ctx.createRadialGradient(ORG_X, ORG_Y, 0, ORG_X, ORG_Y, Math.hypot(xx, yy));
     radGrad.addColorStop(0, '#61B0D0');
     radGrad.addColorStop(0.5, '#4A70FF');

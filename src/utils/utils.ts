@@ -6,10 +6,10 @@ export const getColor = (cashPoint: number) => {
 };
 
 export const f = (x: number) => {
-  x -= 5;
-  if (x < 0) {
-    return Math.pow(1 - (x * x) / 5 / 5, 0.4);
-  }
+  x = Math.max(x - 5, 0);
+  // if (x < 0) {
+  //  return Math.pow(1 - (x * x) / 5 / 5, 0.4);
+  // }
   return Math.pow(x / 10, 2.5) + 1;
 };
 
