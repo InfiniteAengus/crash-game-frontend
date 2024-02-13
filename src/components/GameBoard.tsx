@@ -1,5 +1,9 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { f, fixed, rf, getColor } from "@/utils/utils";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 // import { coinImg } from 'app/config/const';
 
 const rocketImageCount = 180;
@@ -236,9 +240,10 @@ const drawGraph = (W: number, H: number) => {
 };
 
 const drawCrash = (W: number, H: number) => {
+  const time = Math.max(timeElapsed - 5, 0);
   const D = 30 * rate;
-  const curX = ORG_X + (STAGE_WIDTH / W) * timeElapsed + D;
-  const curY = ORG_Y - (f(timeElapsed) / H) * STAGE_HEIGHT - D;
+  const curX = ORG_X + (STAGE_WIDTH / W) * time + D;
+  const curY = ORG_Y - (f(time) / H) * STAGE_HEIGHT - D;
   const imgWidth = 300 * rate;
   const imgHeight = 300 * rate;
   ctx.save();
@@ -361,9 +366,10 @@ const drawHistory = (histories: any[]) => {
 };
 
 const draw = () => {
+  const time = Math.max(timeElapsed - 5, 0);
   ctx.clearRect(0, 0, width, height);
-  let W = Math.max(18, timeElapsed * 1.1);
-  let H = Math.max(4, f(timeElapsed) * 1.3);
+  let W = Math.max(18, time * 1.1);
+  let H = Math.max(4, f(time) * 1.3);
 
   drawBackground();
   drawStatusText();
@@ -420,21 +426,18 @@ const draw = () => {
 };
 
 interface GameBoardProps {
-  gameState: any;
   players: any;
   history: any;
   mywin: any;
   refer: any;
 }
 
-const GameBoard = ({
-  gameState,
-  players,
-  history,
-  mywin,
-  refer,
-}: GameBoardProps) => {
+const GameBoard = ({ players, history, mywin, refer }: GameBoardProps) => {
   const [state, setState] = useState(0);
+
+  const gameState = useSelector(
+    (state: RootState) => state.gameState.gameState
+  );
 
   useEffect(() => {
     _mywin = mywin;
@@ -504,7 +507,6 @@ const GameBoard = ({
           {players.filter((player: any) => player.cashPoint > 0).length}/
           {players.length} Players
         </p>
-        <p>Total: {gameState.totalBet} EBONE</p>
       </div>
       <canvas
         className="mx-auto rounded-3xl"
