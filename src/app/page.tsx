@@ -1,5 +1,6 @@
 "use client";
 import GameBoard from "@/components/GameBoard";
+import UsernameModal from "@/components/UsernameModal";
 import Layout from "@/components/layouts/Layout";
 import { players, history } from "@/data/mockup";
 import SocketProvider from "@/providers/socket";
@@ -12,7 +13,8 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="w-[800px] h-[600px] mx-auto">
+      <div className="w-[800px] h-[600px] mx-auto text-white">
+        <UsernameModal />
         <GameBoard
           players={players}
           history={history}

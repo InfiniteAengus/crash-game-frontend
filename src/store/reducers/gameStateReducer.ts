@@ -9,6 +9,11 @@ interface IGameState {
     GameID: number;
     crashTimeElapsed: number;
   };
+  player: {
+    id: string;
+    name: string;
+    balance: number;
+  };
 }
 
 // Define the initial state using that type
@@ -18,6 +23,11 @@ const initialState: IGameState = {
     isRising: true,
     GameID: 0,
     crashTimeElapsed: 120,
+  },
+  player: {
+    id: "",
+    name: "",
+    balance: 1000,
   },
 };
 
@@ -29,9 +39,17 @@ export const gameStateSlice = createSlice({
     setGameState: (state, action) => {
       state.gameState = action.payload.gameState;
     },
+    setPlayername: (state, action: PayloadAction<string>) => {
+      state.player.name = action.payload;
+      state.player.id = action.payload + "-" + new Date().getTime();
+    },
+    updateBalance: (state, action: PayloadAction<number>) => {
+      state.player.balance = action.payload;
+    },
   },
 });
 
-export const { setGameState } = gameStateSlice.actions;
+export const { setGameState, setPlayername, updateBalance } =
+  gameStateSlice.actions;
 
 export default gameStateSlice.reducer;
