@@ -1,5 +1,6 @@
 "use client";
 import GameBoard from "@/components/GameBoard";
+import GamePanel from "@/components/GamePanel";
 import UsernameModal from "@/components/UsernameModal";
 import Layout from "@/components/layouts/Layout";
 import { players, history } from "@/data/mockup";
@@ -13,14 +14,19 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="w-[800px] h-[600px] mx-auto text-white">
-        <UsernameModal />
-        <GameBoard
-          players={players}
-          history={history}
-          refer={rocketRef}
-          mywin={[]}
-        />
+      <UsernameModal />
+      <div className="2-full flex gap-5">
+        <div>
+          <GamePanel />
+        </div>
+        <div className="w-[800px] h-[600px] mx-auto text-white">
+          <GameBoard
+            players={players}
+            history={history}
+            refer={rocketRef}
+            mywin={[]}
+          />
+        </div>
       </div>
     </Layout>
   );

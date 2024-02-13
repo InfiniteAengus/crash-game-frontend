@@ -55,7 +55,7 @@ const UsernameModal = () => {
           onChange={(e) => setName(e.target.value)}
         />
         <button
-          className="block w-full py-2 text-center rounded-xl bg-gradient-to-br font-[16px] font-medium from-[#796CFF] to-[#574AFF]"
+          className="block w-full py-2 text-center rounded-xl bg-gradient-to-br font-medium from-[#796CFF] to-[#574AFF]"
           onClick={playGame}
         >
           PLAY

@@ -14,6 +14,7 @@ interface IGameState {
     name: string;
     balance: number;
   };
+  betAmount: number;
 }
 
 // Define the initial state using that type
@@ -29,6 +30,7 @@ const initialState: IGameState = {
     name: "",
     balance: 1000,
   },
+  betAmount: 0,
 };
 
 export const gameStateSlice = createSlice({
@@ -44,12 +46,15 @@ export const gameStateSlice = createSlice({
       state.player.id = action.payload + "-" + new Date().getTime();
     },
     updateBalance: (state, action: PayloadAction<number>) => {
-      state.player.balance = action.payload;
+      state.player.balance += action.payload;
+    },
+    setBetAmount: (state, action: PayloadAction<number>) => {
+      state.betAmount = action.payload;
     },
   },
 });
 
-export const { setGameState, setPlayername, updateBalance } =
+export const { setGameState, setPlayername, updateBalance, setBetAmount } =
   gameStateSlice.actions;
 
 export default gameStateSlice.reducer;
