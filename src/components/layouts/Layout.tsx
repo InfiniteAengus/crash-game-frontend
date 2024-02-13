@@ -23,7 +23,7 @@ const Layout: React.FC<LayoutProps> = ({
       <div className="flex h-screen w-full flex-col overflow-y-auto overflow-x-hidden">
         <Provider store={store}>
           <SocketProvider />
-          <Header />
+          {/* <Header /> */}
           <main className={cx(className)}>{children}</main>
         </Provider>
       </div>

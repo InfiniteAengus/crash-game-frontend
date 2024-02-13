@@ -15,17 +15,19 @@ export default function Home() {
   return (
     <Layout>
       <UsernameModal />
-      <div className="2-full flex gap-5">
-        <div>
-          <GamePanel />
-        </div>
-        <div className="w-[800px] h-[600px] mx-auto text-white">
-          <GameBoard
-            players={players}
-            history={history}
-            refer={rocketRef}
-            mywin={[]}
-          />
+      <div className="flex items-center justify-center min-h-screen w-full">
+        <div className="2-full flex gap-5 justify-center">
+          <div>
+            <GamePanel />
+          </div>
+          <div className="w-[800px] h-[600px] text-white">
+            <GameBoard
+              players={players}
+              history={history}
+              refer={rocketRef}
+              mywin={[]}
+            />
+          </div>
         </div>
       </div>
     </Layout>
