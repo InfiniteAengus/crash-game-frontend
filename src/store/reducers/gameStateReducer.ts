@@ -1,5 +1,6 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "..";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '..';
+import { f, fixed } from '@/utils/utils';
 
 // Define a type for the slice state
 interface IGameState {
@@ -15,6 +16,7 @@ interface IGameState {
     balance: number;
   };
   betAmount: number;
+  histories: any[];
 }
 
 // Define the initial state using that type
@@ -26,24 +28,30 @@ const initialState: IGameState = {
     crashTimeElapsed: 120,
   },
   player: {
-    id: "",
-    name: "",
+    id: '',
+    name: '',
     balance: 1000,
   },
   betAmount: 0,
+  histories: [],
 };
 
 export const gameStateSlice = createSlice({
-  name: "counter",
+  name: 'counter',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     setGameState: (state, action) => {
+      const { isRising, timeElapsed } = action.payload.gameState;
+      const time = Math.max(timeElapsed - 5, 0);
+      if (state.gameState.isRising && !isRising) {
+        state.histories = [...state.histories, { crashPoint: fixed(f(time), 2) }];
+      }
       state.gameState = action.payload.gameState;
     },
     setPlayername: (state, action: PayloadAction<string>) => {
       state.player.name = action.payload;
-      state.player.id = action.payload + "-" + new Date().getTime();
+      state.player.id = action.payload + '-' + new Date().getTime();
     },
     updateBalance: (state, action: PayloadAction<number>) => {
       state.player.balance += action.payload;
@@ -54,7 +62,6 @@ export const gameStateSlice = createSlice({
   },
 });
 
-export const { setGameState, setPlayername, updateBalance, setBetAmount } =
-  gameStateSlice.actions;
+export const { setGameState, setPlayername, updateBalance, setBetAmount } = gameStateSlice.actions;
 
 export default gameStateSlice.reducer;
